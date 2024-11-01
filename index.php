@@ -1,0 +1,120 @@
+<?php
+/**
+ * POP – Fatture Elettroniche & Generatore di Documenti Legali per eCommerce (ex-WooPop)
+ *
+ * Plugin Name: POP – Fatture Elettroniche & Generatore di Documenti Legali per eCommerce (ex-WooPop)
+ * Plugin URI: https://wp-pop.com
+ * Description: <code><strong>POP (Versione Gratuita)</strong></code>, è integrato con woocommerce, Raccoglie i dati per la generazione del file XML per la fatturazione elettronica, ed inserisce in backend e in frontend i campi necessari alla fatturazione elettronica. Passa alla <strong><a href="https://wp-pop.com/?ref=1&free_desc">VERSIONE PREMIUM</a></strong>
+ *
+ * Version: 3.3.3
+ * Author: POP
+ * Author URI: https://wp-pop.com/
+ *
+ * WC requires at least: 4.0
+ * WC tested up to: 9.x.x
+ * License GPL 2 Text
+ * Domain: el-inv
+ *
+ * Copyright (C) 2024 POP <info@wp-pop.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+if (! defined('WC_EL_INV_ENV')) {
+    define('WC_EL_INV_ENV', 'prod');
+}
+
+// Define constant.
+define('WC_EL_INV_PREMIUM', '(Premium Version)');
+define('WC_EL_INV_FREE_NAME', 'Electronic Invoice');
+define('WC_EL_INV_FREE_TEXTDOMAIN', 'el-inv');
+define('WC_EL_INV_FREE_VERSION', '3.3.3');
+define('WC_EL_INV_FREE_VERSION_CLASS', str_replace('.', '_', WC_EL_INV_FREE_VERSION));
+// Plugin DIR
+define('WC_EL_INV_FREE_PLUGIN_DIR', basename(plugin_dir_path(__FILE__)));
+// Dirs
+define('WC_EL_INV_FREE_DIR', plugin_dir_path(__FILE__));
+// Uri
+define('WC_EL_INV_FREE_URL', plugin_dir_url(__FILE__));
+
+// Base Requirements.
+require_once untrailingslashit(WC_EL_INV_FREE_DIR . '/src/Plugin.php');
+require_once untrailingslashit(WC_EL_INV_FREE_DIR . '/requires.php');
+
+// Register the activation hook.
+register_activation_hook(__FILE__, array('WcElectronInvoiceFree\\Activate', 'activate'));
+register_deactivation_hook(__FILE__, array('WcElectronInvoiceFree\\Deactivate', 'deactivate'));
+
+// Init
+add_action('plugins_loaded', function () {
+    // Prevent init plugin in other ajax action
+    // WooPop use only "markInvoice" ajax action
+    if (! is_admin() && defined('DOING_AJAX') && DOING_AJAX &&
+        isset($_REQUEST['action']) && 'markInvoice' !== $_REQUEST['action']
+    ) {
+        return;
+    }
+
+    // Load plugin text-domain.
+    load_plugin_textdomain('el-inv', false, '/' . WC_EL_INV_FREE_PLUGIN_DIR . '/languages/');
+    // Check for the dependency.
+    if (\WcElectronInvoiceFree\Functions\isWooCommerceActive()) :
+        $filters = array();
+
+        // Global filter
+        $filters = array_merge(
+            $filters,
+            include \WcElectronInvoiceFree\Plugin::getPluginDirPath('/inc/filters.php')
+        );
+        // Admin filter
+        if (is_admin()) {
+            $filters = array_merge(
+                $filters,
+                include \WcElectronInvoiceFree\Plugin::getPluginDirPath('/inc/filtersAdmin.php')
+            );
+        } // Front filter
+        else {
+            $filters = array_merge(
+                $filters,
+                include \WcElectronInvoiceFree\Plugin::getPluginDirPath('/inc/filtersFront.php')
+            );
+        }
+
+        // Loader init.
+        $init = new WcElectronInvoiceFree\Init(new WcElectronInvoiceFree\Loader(), $filters);
+        $init->init();
+
+        // Settings plugin init.
+        \WcElectronInvoiceFree\Admin\Settings\OptionPage::init();
+    else :
+        // WooCommerce not active, lets disable the plugin.
+        \WcElectronInvoiceFree\Functions\disablePlugin();
+    endif;
+
+    // Support for High-Performance Order Storage
+    add_action('before_woocommerce_init', function () {
+        if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+                'custom_order_tables',
+                __FILE__,
+                true
+            );
+        }
+    });
+}, 10);

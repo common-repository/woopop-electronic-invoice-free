@@ -1,0 +1,119 @@
+== 3.3.3 - 28/10/2024 ==
+Fix: string localization
+
+== 3.3.2 - 11/10/2024 ==
+Update version
+
+== 3.3.1 - 18/11/2023 ==
+Fix: toggleBillingCompany (receipt and reset event)
+
+== 3.3.0 - 17/10/2023 ==
+Add: XML tag ScontoMaggiorazione for discount
+Add: Support for High-Performance Order Storage
+Fix: choiceType method, icon for receipt (credit note)
+Fix: admin style
+
+== 3.2.2 - 11/09/2023 ==
+Fix: checkout validation (conditions)
+Fix: checkout process (conditions)
+Add: support for WooCommerce 8.x.x
+
+== 3.2.1 - 08/07/2023 ==
+Fix: checkout invoice type empty check
+Fix: tax code billing field validation for association
+Fix: billing fields HTML Injection
+Add: support for WooCommerce 7.8.x
+
+== 3.2.0 - 02/01/2023 ==
+Fix: minor fix
+Add: support for WooCommerce 7.2.x
+Improve: moved general invoice options
+
+== 3.1.3 - 28/11/2022 ==
+Fix: sprintf() arguments
+
+== 3.1.2 - 27/11/2022 ==
+Fix: minor fix
+Add: support for WordPress 6.1.x
+Add: support for WooCommerce 7.1.x
+
+== 3.1.1 - 28/10/2022 ==
+Add: support for WooCommerce 7.x.x
+
+== 3.1.0 - 20/10/2022 ==
+Fix: wcOrderClassName class name check
+Add: support payment_method igfs Credit Card (PagOnline Imprese)
+
+== 3.0.4 - 10/10/2022 ==
+Fix: billing_company required if customer type is "company"
+Dev: Add filter hook invoice Field args "billing_invoice_field_args"
+
+== 3.0.3 - 14/09/2022 ==
+Add: support for WooCommerce 6.9.x
+Add: information and controls for the main options to configure
+
+== 3.0.2 - 24/07/2022 ==
+Fix: create xml query bug
+Add: support for WooCommerce 6.7.x
+
+== 3.0.1 - 15/07/2022 ==
+Fix: create pdf
+Fix: create pdf generate limit
+
+== 3.0.0 - 24/06/2022 ==
+Add: support for WordPress 6.0.x
+Add: support for WooCommerce 6.6.x
+Add: Download of XML invoices for the last 5 orders
+Fix: various style fix
+
+== 2.0.4 - 25/05/2022 ==
+Fix: list order XmlOrderListTable (unset order) if Invoice order not sent and order total is equal total refunded or order total is zero
+Add: support payment_method soisy
+Add: payment method info in the invoice table
+
+== 2.0.3 - 24/05/2022 ==
+Fix: filter_var support for PHP >= 8.1
+
+== 2.0.2 - 22/05/2022 ==
+Fix: optimization code
+Fix: filterInput filter for PHP >= 8.1
+
+== 2.0.1 - 21/05/2022 ==
+Fix: Error due to missing file vendor
+
+== 2.0.0 - 20/05/2022 ==
+Dev: autoload psr-4
+Update: admin style
+Add: support for WooCommerce 6.5.x
+Add: support for WordPress 5.9.x
+Add: Dompdf for create pdf file and remove Mpdf library.
+
+== 1.3.3 - 17/11/2021 ==
+Fix: minor fix.
+Add: support for WooCommerce 5.9.x
+Add: support for WordPress 5.8.x
+
+== 1.3.2 - 01/09/2021 ==
+Add: support for WooCommerce 5.6.x
+Add: support for WordPress 5.8.x
+
+== 1.3.1 - 12/05/2021 ==
+Fix: minor fix and update description.
+
+== 1.3.0 - 08/05/2021 ==
+Add: support for WooCommerce 5.2.x
+Add: support for WordPress 5.7.x
+
+== 1.2.0 - 30/03/2020 ==
+Fix: support for WooCommerce 4.0.0
+
+== 1.1.1 - 05/06/2019 ==
+Fix: check on vat if you choose the receipt
+
+== 1.1.0 - 08/05/2019 ==
+Add: Receipt PDF template
+Add: Option to choose the type of document (invoice or receipt) in the checkout
+Tweak: Order/invoice list table layout
+
+== 1.0.0 - 03/05/2019 ==
+Initial release
